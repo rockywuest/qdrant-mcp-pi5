@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "qdrant-memory": {
+      "command": "mcp-server-qdrant",
+      "description": "Persistent vector memory using local Qdrant storage",
+      "env": {
+        "QDRANT_LOCAL_PATH": "/home/pi/.qdrant-data",
+        "COLLECTION_NAME": "agent-memory"
+      }
+    }
+  }
+}
