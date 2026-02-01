@@ -1,5 +1,7 @@
 # Qdrant MCP on Raspberry Pi 5
 
+![Qdrant MCP on Pi 5](assets/hero.png)
+
 **Persistent semantic memory for AI agents — local, private, $0 cost.**
 
 Give your AI agent a real memory that survives reboots, searches by meaning (not keywords), and runs entirely on a Raspberry Pi 5 with no cloud dependencies.
