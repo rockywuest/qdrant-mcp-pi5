@@ -1,0 +1,33 @@
+{
+  "name": "@nox/memory-qdrant",
+  "version": "0.1.0",
+  "description": "OpenClaw Memory Plugin using Qdrant vector database for Nox",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "openclaw",
+    "memory",
+    "qdrant",
+    "vector-database",
+    "nox"
+  ],
+  "author": "Rocky Wüst <rocky.wuest@gmail.com>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "openclaw": ">=2026.1.0"
+  },
+  "openclaw": {
+    "type": "plugin",
+    "slot": "memory",
+    "hooks": ["before_agent_start", "tool_result_persist"]
+  }
+}

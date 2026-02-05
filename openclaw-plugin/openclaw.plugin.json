@@ -1,0 +1,16 @@
+{
+  "id": "nox-memory-qdrant",
+  "displayName": "Nox Memory Qdrant",
+  "type": "memory",
+  "hooks": ["before_agent_start"],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      }
+    }
+  }
+}

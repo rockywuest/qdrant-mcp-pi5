@@ -6,6 +6,8 @@
 
 Give your AI agent a real memory that survives reboots, searches by meaning (not keywords), and runs entirely on a Raspberry Pi 5 with no cloud dependencies.
 
+> **New:** Includes an [OpenClaw Hard Enforcement Plugin](#hard-enforcement-plugin-openclaw) that automatically injects memories before every response — no LLM decision required.
+
 ---
 
 ## The Problem
@@ -271,6 +273,108 @@ Then point mcporter at the server instead of using local mode:
 - **First call is slower** (~3-5s) as the ONNX model loads. Subsequent calls in quick succession reuse the process.
 - **Embedding model runs on CPU** — no GPU needed. The all-MiniLM-L6-v2 model is optimized for ONNX runtime on ARM64.
 - **Data is local** — nothing leaves your device. No API keys needed for the vector DB.
+
+---
+
+## Hard Enforcement Plugin (OpenClaw)
+
+The basic setup above requires the LLM to *decide* to query Qdrant. In practice, agents "forget" to use memory tools — they're optional, and LLMs skip them when rushing to answer.
+
+**Hard Enforcement** solves this: an OpenClaw plugin that automatically queries Qdrant before every response and injects relevant memories into the prompt. No LLM decision required.
+
+### How It Works
+
+```
+User message arrives
+  ↓
+before_agent_start hook fires
+  ↓
+Plugin extracts user query
+  ↓
+mcporter calls qdrant-find
+  ↓
+Top 5 results injected as prependContext
+  ↓
+LLM sees memories BEFORE generating response
+```
+
+### Installation
+
+```bash
+cd openclaw-plugin
+npm install
+npm run build
+
+# Copy to OpenClaw extensions
+sudo cp -r . /usr/lib/node_modules/openclaw/extensions/nox-memory-qdrant/
+
+# Restart OpenClaw
+sudo systemctl restart openclaw-gateway
+```
+
+### Plugin Structure
+
+```
+openclaw-plugin/
+├── package.json              # @nox/memory-qdrant
+├── openclaw.plugin.json      # Plugin manifest
+├── tsconfig.json
+└── src/
+    ├── index.ts              # Plugin entry + register()
+    ├── qdrant-client.ts      # mcporter CLI wrapper
+    └── auto-recall.ts        # before_agent_start hook
+```
+
+### What Gets Injected
+
+When a user asks "Wer ist Martin Grieß?", the plugin:
+
+1. Calls `mcporter run qdrant-memory qdrant-find --query "Wer ist Martin Grieß?"`
+2. Gets results from Qdrant (semantic search)
+3. Injects them as:
+
+```markdown
+## QDRANT MEMORY RECALL (automatisch, Hard Enforcement)
+
+Relevante Informationen aus der Vektordatenbank:
+
+1. [87%] Martin Grieß ist Head of Data bei H. & J. Brüggen KG (Quelle: people.md)
+2. [72%] Martin arbeitet eng mit dem CDO Rocky Wüst zusammen (Quelle: org.md)
+
+---
+Diese Informationen wurden automatisch abgerufen.
+```
+
+The LLM sees this context **before** it starts generating — no decision to "use memory" needed.
+
+### Configuration
+
+The plugin has minimal config:
+
+```json
+{
+  "enabled": true
+}
+```
+
+Skip patterns (short messages like "hi", "ok", "danke") are handled automatically to avoid unnecessary queries.
+
+### Performance
+
+| Metric | Value |
+|--------|-------|
+| Latency per query | ~100-500ms |
+| Health check cache | 30 seconds |
+| Max results | 5 (configurable) |
+
+### Soft vs Hard Enforcement
+
+| Approach | How it works | Reliability |
+|----------|-------------|-------------|
+| **Soft** (AGENTS.md rules) | LLM instructed to use Qdrant | ~60-70% |
+| **Hard** (this plugin) | Hook injects memories automatically | ~99% |
+
+Use both together for maximum coverage: hard enforcement catches everything, soft enforcement teaches the LLM to cite sources properly.
 
 ---
 
