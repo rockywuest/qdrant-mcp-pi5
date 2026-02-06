@@ -1,0 +1,10 @@
+{
+  "name": "@nox/drift-memory",
+  "version": "1.0.0",
+  "description": "Biological-style memory with co-occurrence tracking for OpenClaw",
+  "main": "index.js",
+  "type": "commonjs",
+  "author": "Rocky Wüst",
+  "license": "MIT",
+  "keywords": ["openclaw", "memory", "drift-memory", "co-occurrence"]
+}
