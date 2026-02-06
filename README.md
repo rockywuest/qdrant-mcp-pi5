@@ -8,6 +8,8 @@ Give your AI agent a real memory that survives reboots, searches by meaning (not
 
 > **New:** Includes an [OpenClaw Hard Enforcement Plugin](#hard-enforcement-plugin-openclaw) that automatically injects memories before every response — no LLM decision required.
 
+> **Recommended:** Pair with [drift-memory](https://github.com/driftcornwall/drift-memory) for behavioral pattern tracking. See [Hybrid Architecture](#hybrid-architecture-qdrant--drift-memory).
+
 ---
 
 ## The Problem
@@ -378,11 +380,62 @@ Use both together for maximum coverage: hard enforcement catches everything, sof
 
 ---
 
+## Hybrid Architecture: Qdrant + drift-memory
+
+Qdrant excels at **semantic retrieval** — finding facts by meaning. But it doesn't track *how* the agent uses knowledge over time.
+
+[drift-memory](https://github.com/driftcornwall/drift-memory) complements Qdrant with **co-occurrence tracking**:
+
+| System | Good at | Example Query |
+|--------|---------|---------------|
+| **Qdrant** | Facts, entities, semantic similarity | "Who is Martin Grieß?" |
+| **drift-memory** | Behavioral patterns, preferences | "What communication style works best?" |
+
+### How They Work Together
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    HYBRID MEMORY STACK                       │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ┌─────────────────────┐     ┌─────────────────────┐        │
+│  │       Qdrant        │     │    drift-memory     │        │
+│  │       (WHAT)        │     │       (HOW)         │        │
+│  │                     │     │                     │        │
+│  │  • 384-dim vectors  │     │  • YAML files       │        │
+│  │  • Cosine similarity│     │  • Co-occurrence    │        │
+│  │  • Hard enforcement │     │  • Biological decay │        │
+│  │  • ~3s latency      │     │  • <100ms latency   │        │
+│  └─────────────────────┘     └─────────────────────┘        │
+│           ↓                           ↓                      │
+│   "What do I know             "How does the user            │
+│    about X?"                   prefer to work?"              │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Key Insight
+
+From the drift-memory maintainers:
+
+> "Co-occurrence tells you HOW the agent uses its knowledge. Vector embeddings tell you WHAT is semantically similar. They serve different purposes."
+
+Memories retrieved together become linked. Over sessions, patterns emerge organically — no manual relationship tagging needed.
+
+### Integration
+
+1. Use Qdrant for **fact retrieval** (this repo)
+2. Use drift-memory for **behavioral patterns** ([drift-memory repo](https://github.com/driftcornwall/drift-memory))
+3. Both can run on Pi 5 with minimal resource conflict
+
+---
+
 ## Links
 
 - [Qdrant MCP Server](https://github.com/qdrant/mcp-server-qdrant)
 - [mcporter](https://github.com/steipete/mcporter)
 - [OpenClaw](https://github.com/openclaw/openclaw)
+- [drift-memory](https://github.com/driftcornwall/drift-memory) — Biological-style memory with co-occurrence tracking
 - [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
 - [MCP Specification](https://modelcontextprotocol.io)
 
