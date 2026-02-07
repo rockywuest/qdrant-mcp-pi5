@@ -6,5 +6,8 @@
   "type": "commonjs",
   "author": "Rocky Wüst",
   "license": "MIT",
-  "keywords": ["openclaw", "memory", "drift-memory", "co-occurrence"]
+  "keywords": ["openclaw", "memory", "drift-memory", "co-occurrence"],
+  "openclaw": {
+    "extensions": ["./index.js"]
+  }
 }

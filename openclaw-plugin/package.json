@@ -1,9 +1,8 @@
 {
-  "name": "@nox/memory-qdrant",
-  "version": "0.1.0",
-  "description": "OpenClaw Memory Plugin using Qdrant vector database for Nox",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "name": "nox-memory-qdrant",
+  "version": "0.2.0",
+  "description": "OpenClaw Memory Plugin using Qdrant vector database via mcporter",
+  "main": "src/index.js",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"
@@ -26,8 +25,6 @@
     "openclaw": ">=2026.1.0"
   },
   "openclaw": {
-    "type": "plugin",
-    "slot": "memory",
-    "hooks": ["before_agent_start", "tool_result_persist"]
+    "extensions": ["./src/index.js"]
   }
 }
