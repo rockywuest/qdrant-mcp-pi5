@@ -8,7 +8,7 @@ Give your AI agent a real memory that survives reboots, searches by meaning (not
 
 > **New:** Includes an [OpenClaw Hard Enforcement Plugin](#hard-enforcement-plugin-openclaw) that automatically injects memories before every response — no LLM decision required.
 
-> **Recommended:** Pair with [drift-memory](https://github.com/driftcornwall/drift-memory) for behavioral pattern tracking. See [Hybrid Architecture](#hybrid-architecture-qdrant--drift-memory).
+> **Note (2026-03-19):** drift-memory was deprecated in Feb 2026 — all 105 entries migrated into Qdrant. This repo now stands alone. Embeddings migrated from all-MiniLM-L6-v2 (384d) → Gemini gemini-embedding-001 (3072d) via OpenClaw's memorySearch config.
 
 ---
 
@@ -34,9 +34,9 @@ The words don't match, but the meaning does. That's the difference.
 |-----------|---------|---------|
 | **Raspberry Pi 5** | 8GB RAM | Hardware |
 | **Qdrant MCP Server** | v0.8.1 | Vector storage + search |
-| **all-MiniLM-L6-v2** | 384-dim | Embedding model (ONNX, CPU) |
+| **Gemini gemini-embedding-001** | 3072-dim | Embedding model (API, migrated from MiniLM) |
 | **mcporter** | v0.7.3 | MCP client / bridge |
-| **OpenClaw** | 2026.1.30 | Agent framework (optional) |
+| **OpenClaw** | 2026.3.13 | Agent framework (optional) |
 
 ## Performance (Pi 5, ARM64)
 
