@@ -1,5 +1,9 @@
 # Qdrant MCP on Raspberry Pi 5
 
+[![Works with OpenClaw](https://img.shields.io/badge/Works_with-OpenClaw-blue?logo=data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=)](https://openclaw.ai)
+[![Works with Claude Code](https://img.shields.io/badge/Works_with-Claude_Code-orange)](https://docs.anthropic.com/en/docs/claude-code)
+[![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-green)](https://modelcontextprotocol.io)
+
 ![Qdrant MCP on Pi 5](assets/hero.png)
 
 **Persistent semantic memory for AI agents — local, private, $0 cost.**
