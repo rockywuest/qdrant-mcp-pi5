@@ -1,7 +1,28 @@
+# Node
 node_modules/
-dist/
-.env
-*.log
-coverage/
-.DS_Store
 package-lock.json
+.npm/
+
+# Python (if testing scripts exist)
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Qdrant
+qdrant_data/
+storage/
+*.snapshot
+
+# Env
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
